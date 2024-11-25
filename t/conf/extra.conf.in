@@ -931,6 +931,9 @@ LimitRequestFields    32
          ErrorDocument 500 "hmph
     </Directory>
 
+    TraceEnable off
+    ErrorDocument 405 /i/dont/exist
+
 </VirtualHost>
 
 <Directory @DocumentRoot@/modules/filter/byterange/pr61860>

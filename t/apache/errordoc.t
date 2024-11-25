@@ -7,7 +7,7 @@ use Apache::TestUtil;
 
 Apache::TestRequest::module('error_document');
 
-plan tests => 14, need_lwp;
+plan tests => 17, need_lwp;
 
 # basic ErrorDocument tests
 
@@ -105,4 +105,35 @@ plan tests => 14, need_lwp;
     ok t_cmp($content,
              qr!expire test!,
              '/bounce/notfound.html content');
+}
+
+{
+    my $l = Apache::TestRequest::resolve_url('/trace/notallowed.html');
+    my $req = HTTP::Request->new('TRACE', $l);
+    my $ua = LWP::UserAgent->new();
+    my $response = $ua->request($req);
+    chomp(my $content = $response->content);
+
+    ok t_cmp($response->code,
+             405,
+             '/trace/notallowed.html code');
+
+    if (need_min_apache_version("2.5.1")) {
+        ok t_cmp($content,
+                 qr!The requested method TRACE is not allowed for this URL.!,
+                 '/trace/notallowed.html content');
+    }
+    else {
+        skip "Skipping test"
+    }
+
+    if (need_min_apache_version("2.5.1")) {
+        ok t_cmp($content,
+                 qr!Additionally, a 404 Not Found!,
+                 '/trace/notallowed.html content');
+    }
+    else {
+        skip "Skipping test"
+    }
+
 }
