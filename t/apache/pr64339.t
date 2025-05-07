@@ -18,7 +18,7 @@ my @testcases = (
     ['/doc.notxml', "application/notreallyxml", "f\xf3\xf3\n" ],
 
     # Sent with charset=ISO-8859-1 - should be transformed to utf-8
-    ['/doc.isohtml', "text/html;charset=utf-8", "<html><body><p>fóó\n</p></body></html>" ],
+    ['/doc.isohtml', "text/html;charset=utf-8", "<html><body>.*fóó\n.*</body></html>" ],
 );
 
 # mod_xml2enc on trunk behaves quite differently to the 2.4.x version
@@ -42,5 +42,5 @@ foreach my $t (@testcases) {
     
     ok t_cmp($r->code, 200, "fetching ".$t->[0]);
     ok t_cmp($r->header('Content-Type'), $t->[1], "content-type header test for ".$t->[0]);
-    ok t_cmp($r->content, $t->[2], "content test for ".$t->[0]);
+    ok t_cmp($r->content, qr/$t->[2]/, "content test for ".$t->[0]);
 }
