@@ -10,7 +10,7 @@ use HTTP::Date;
 ## mod_dav tests
 ##
 
-plan tests => 19, [qw(dav HTTP::DAV)];
+plan tests => 21, [qw(dav HTTP::DAV)];
 require HTTP::DAV;
 
 my $vars = Apache::Test::vars();
@@ -94,12 +94,20 @@ my $r2 = $d2->new_resource( -uri => "http://$server$uri");
 
 ## put an unlocked resource (will work) ##
 $response = $r2->get;
-my $b2 = $r2->get_content;
-$b2 =~ s#<h1>mod_dav test page</h1>#<h1>mod_dav test page take two</h1>#;
+ok t_cmp(defined $r2->get_content, 1, "GET failed for ".$r2->get_uri);
+my $b2;
+if (defined $r2->get_content) {
+    $b2 = $r2->get_content;
+    $b2 =~ s#<h1>mod_dav test page</h1>#<h1>mod_dav test page take two</h1>#;
 
-print "putting with 2nd dav client (on unlocked resource)\n";
-$response = $r2->put($b2);
-ok $response->is_success;
+    print "putting with 2nd dav client (on unlocked resource)\n";
+    $response = $r2->put($b2);
+    ok $response->is_success;
+}
+else {
+    skip "Broken configuration, GET not working";
+    $b2 = "---broken---";
+}
 
 $actual = GET_BODY $uri;
 print "getting new uri...\nexpect:\n->$b2<-\ngot:\n->$actual<-\n";
@@ -130,8 +138,15 @@ ok !$response->is_success;
 
 ## client 2 should not be able to put because the resource is already locked by client 1 ##
 $response = $r2->get;
-my $b3 = $r2->get_content;
-$b3 =~ s#mod_dav#f00#g;
+ok t_cmp(defined $r2->get_content, 1, "GET failed for ".$r2->get_uri);
+my $b3;
+if (defined $r2->get_content) {
+    $b3 = $r2->get_content;
+    $b3 =~ s#mod_dav#f00#g;
+}
+else {
+    $b3 = "---broken---";
+}
 
 print "client 2 attempting to put resource locked by client 1\n";
 $response = $r2->put($b3);
