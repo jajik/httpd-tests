@@ -306,6 +306,19 @@
       RewriteRule proxy_ne/(.*) http://@SERVERNAME@:@PORT@/?$1 [P,NE]
     </LocationMatch>
 
+
+   RewriteCond expr false
+   RewriteRule ^/modules/rewrite/expr/notgone/false$ - [G]
+
+   RewriteCond expr !true
+   RewriteRule ^/modules/rewrite/expr/notgone/nottrue$ - [G]
+
+   RewriteCond expr true
+   RewriteRule ^/modules/rewrite/expr/shouldredir/true$ /dummy [R=303]
+
+   RewriteCond expr !false
+   RewriteRule ^/modules/rewrite/expr/shouldredir/notfalse$ /dummy [R=303]
+
    <Location /modules/rewrite/>
       Header always set rewritten-query "expr=%{QUERY_STRING}"
    </Location>

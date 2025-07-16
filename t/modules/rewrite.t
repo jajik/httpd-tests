@@ -99,6 +99,12 @@ if (have_min_apache_version('2.4.60')){
     ));
 }
 
+my @condexpr= (
+        [ "/modules/rewrite/expr/notgone/false"                          =>  404],
+        [ "/modules/rewrite/expr/notgone/nottrue"                        =>  404],
+        [ "/modules/rewrite/expr/shouldredir/true"                       =>  303],
+        [ "/modules/rewrite/expr/shouldredir/notfalse"                   =>  303],
+);
 if (!have_min_apache_version('2.4.19')) {
     # PR 50447, server context
     push @todo, 26
@@ -114,7 +120,7 @@ my $cookie_tests = have_min_apache_version("2.4.47") ? 6 : 0;
 my @redirects = map {$_->[2] ? $_ : ()} @redirects_all;
 
 plan tests => @map * @num + 16 + $vary_header_tests + $cookie_tests + scalar(@escapes) + scalar(@redirects) + scalar(@bflags)
-              + scalar(@badquery) + scalar(@prefixstats),
+              + scalar(@badquery) + scalar(@prefixstats) + scalar(@condexpr),
               todo => \@todo, need_module 'rewrite';
 
 foreach (@map) {
@@ -313,8 +319,17 @@ foreach my $t (@badquery) {
     ok t_cmp $received, $expect;
 }
 
+foreach my $t (@condexpr) {
+    my $url =  $t->[0];
+    my $expect = $t->[1];
+    t_debug "Check $url for $expect\n";
+    $r = GET($url, redirect_ok => 0);
+    ok t_cmp $r->code, $expect;
+}
+
 foreach my $t (@prefixstats) {
     # Uses vhost "rewrite_prefix_stat" with larger LimitRequestLine
+    # Seems to have a side affect for any subsequent GET's
     my $url= Apache::TestRequest::module2url("rewrite_prefix_stat", { path => $t->[0] });
     my $expect = $t->[1];
     t_debug "Check $url for $expect\n";
