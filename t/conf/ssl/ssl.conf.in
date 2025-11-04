@@ -5,6 +5,13 @@
     AddType application/x-x509-ca-cert .crt
     AddType application/x-pkcs7-crl    .crl
 
+    # hack to allow environment variable to affect test config
+    <IfFile !${NO_TEST_SNIPOLICY}>
+    <IfVersion >= 2.4.66>
+       SSLVHostSNIPolicy insecure
+    </Ifversion>
+    </IfFile>
+
     <IfDefine TEST_SSL_SESSCACHE>
        SSLSessionCache      ${SSL_SESSCACHE}
     </IfDefine>
@@ -77,7 +84,8 @@
         SSLCARevocationCheck chain
     </IfVersion>
 
-    <VirtualHost @ssl_module_name@>
+    # any string other than _default_ causes an NVH set to be created
+    <VirtualHost default:@ssl_module_name@>
         SSLEngine on
 
         #t/ssl/verify.t
@@ -218,6 +226,10 @@
             RewriteRule ^/modules/h2/latest.tar.gz$ /modules/h2/xxx-1.0.2a.tar.gz [R=302,NC]
         </IfModule>
 
+    </VirtualHost>
+
+    <VirtualHost nvh:@ssl_module_name@>
+      ServerAlias nvh
     </VirtualHost>
 
     # An SSL vhost which does optional ccert checks at vhost level, to
