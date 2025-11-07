@@ -124,7 +124,7 @@ sub ai_test ($$$$) {
 
     my $html_head;
 
-    if (have_min_apache_version('2.5.1')) {
+    if (have_min_apache_version('2.4.66')) {
         $html_head = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
     }
     else {
