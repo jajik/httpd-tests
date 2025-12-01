@@ -434,6 +434,11 @@
     ScriptLogLength 51200
     ScriptLogBuffer 256
 
+    <IfModule mod_env.c>
+        SetEnv GATEWAY?INTERFACE "dummy/1.0"
+        SetEnv HTTP?host "localhost"
+    </ifModule>
+
     <Directory @SERVERROOT@/htdocs/modules/cgi>
         Options +ExecCGI
 

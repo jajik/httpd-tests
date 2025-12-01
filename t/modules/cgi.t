@@ -11,6 +11,7 @@ my $have_apache_2050 = have_min_apache_version "2.0.50";
 my $have_apache_2460 = have_min_apache_version "2.4.60";
 
 my $script_log_length = 51200;
+my $htdocs = Apache::Test::vars('documentroot');
 
 ## mod_cgi test
 ##
@@ -95,6 +96,15 @@ my %test = (
         'rc' => 200,
         'expect' => 'this is nph-stdout'
     },
+    'env.pl?gateway' => {
+        'rc' => 200,
+        'expect' => 'GATEWAY_INTERFACE = CGI/1.1'
+    },
+    'env.pl?host' => {
+        'rc' => 200,
+        'expect' => 'HTTP_HOST = example.com'
+    },
+
 );
 
 #XXX: find something that'll on other platforms (/bin/sh aint it)
