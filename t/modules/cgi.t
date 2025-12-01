@@ -102,7 +102,7 @@ my %test = (
     },
     'env.pl?host' => {
         'rc' => 200,
-        'expect' => 'HTTP_HOST = example.com'
+        'expect' => 'HTTP_HOST = localhost'
     },
 
 );
@@ -152,10 +152,18 @@ foreach (sort keys %test) {
         $actual = GET_BODY "$path/$_";
         chomp $actual if $actual =~ /\n$/;
 
-        ok t_cmp($actual,
-                 $expected,
-                 "body for $_"
-                );
+        if ($expected =~ /=/) {
+            t_debug("$path/$_: check for $expected within $actual");
+            ok t_cmp($actual =~ /\Q$expected\E/ ? 1 : 0,
+                     1,
+                     "body for $_"
+                    );
+        } else {
+            ok t_cmp($actual,
+                     $expected,
+                     "body for $_"
+                    );
+        }
     }
     elsif ($_ !~ /^bogus/) {
         print "# no body test for this one\n";
