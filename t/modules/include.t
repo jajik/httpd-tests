@@ -89,6 +89,7 @@ my %test = (
 "exec/off/cmd.shtml"    =>    "[an error occurred while processing this ".
                               "directive]",
 "exec/on/cmd.shtml"     =>    "pass",
+"exec/on/cmd.shtml?extra"     =>    "pass",
 "exec/off/cgi.shtml"    =>    "[an error occurred while processing this ".
                               "directive]",
 "exec/on/cgi.shtml"     =>    "perl cgi",
