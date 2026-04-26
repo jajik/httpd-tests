@@ -154,7 +154,7 @@ sub run_fcgi_envvar_request
     }
 
     if(defined($fcgi_port)) {
-        if ($r->code ge '500') {
+        if ($r->code ge '399') {
             # Unknown failure, probably the request didn't hit the FCGI child
             # process, so it will hang waiting for our request
             kill 'TERM', $child;
