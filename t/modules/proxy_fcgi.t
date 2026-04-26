@@ -328,6 +328,11 @@ foreach my $url (@udstests) {
 }
 
 for my $t (@balancertests) {
+    if (!have_module("proxy_balancer")) {
+        skip "no proxy_balancer";
+        skip "no proxy_balancer";
+        next;
+    }
     my $url = $t->{"url"};
     my $pathinfo = $t->{"pathinfo"};
     $envs = run_fcgi_envvar_request($fcgi_port, $url);
