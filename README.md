@@ -35,11 +35,18 @@ that you have up to date versions of each of these perl modules:
 
 ```
 cpan App::cpanminus
-cpanm Bundle::ApacheTest \
-  HTTP::DAV DateTime Time::HiRes \
-  Test::Harness Crypt::SSLeay Net::SSLeay IO::Socket::SSL \
+cpanm Bundle::ApacheTest
+cpanm HTTP::DAV DateTime Time::HiRes \
+  Test::Harness IO::Socket::SSL \
   IO::Socket::IP IO::Select LWP::Protocol::https AnyEvent \
   AnyEvent::WebSocket::Client LWP::Protocol::AnyEvent::http FCGI
+```
+
+If the Bundle::ApacheTest fails due to native compilation issues with Crypt::SSLeay, you
+can install the remaining packages:
+
+```
+cpanm --quiet --showdeps  Bundle::ApacheTest|grep -v Crypt::SSLeay|xargs cpanm
 ```
 
 ## Quick Start
