@@ -29,6 +29,18 @@ github:
     squash: true
     merge: false
     rebase: true
+  rulesets:
+    - name: "Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "trunk"
+        excludes: []
+      bypass_teams:
+        - root
+      restrict_deletion: true
+      restrict_force_push: true
+      required_linear_history: true
 
 notifications:
   commits: cvs@httpd.apache.org
