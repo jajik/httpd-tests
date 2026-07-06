@@ -157,38 +157,38 @@ my @tests = (
       pattern => 'RX_EVENT_END_OK', desc => 'event attr preserved after regex multi-substitution' },
 
     # Comment-after-rewrite regression tests (garbage introduced after
-    # comments that follow rewritten URLs, fixed in 2.4.69)
+    # comments that follow rewritten URLs)
     { type => 'url_rewrite', path => 'comment_rewrite/comment_rewrite.html',
       pattern => 'http://b\\.example\\.com/static/images/favicon\\.png', desc => 'rewritten URL before comment',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comment_rewrite/comment_rewrite.html',
       pattern => '<!-- Font Awesome Icons -->', desc => 'comment preserved after rewrite',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comment_rewrite/comment_rewrite.html',
       pattern => 'http://b\\.example\\.com/static/plugins/fontawesome-free/css/all\\.min\\.css',
       desc => 'rewritten URL after comment not corrupted',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comment_rewrite/comment_rewrite.html',
       pattern => '<!-- comment after link -->', desc => 'inline comment preserved after rewrite',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comment_rewrite/comment_rewrite.html',
       pattern => '-->\\s*<link', desc => 'no garbage between comment and following tag',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
 
     # Comment stripping with extfix off (strip_comments=on, extfix=off)
     { type => 'comment', path => 'comments_strip_no_extfix/comment_rewrite.html',
       pattern => '<!-- Font Awesome Icons -->', negate => 1, desc => 'comment stripped with extfix off',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'comment', path => 'comments_strip_no_extfix/comment_rewrite.html',
       pattern => '<!-- comment after link -->', negate => 1, desc => 'inline comment stripped with extfix off',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comments_strip_no_extfix/comment_rewrite.html',
       pattern => 'http://b\\.example\\.com/static/images/favicon\\.png', desc => 'URL rewritten with comments stripped, extfix off',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comments_strip_no_extfix/comment_rewrite.html',
       pattern => 'http://b\\.example\\.com/static/plugins/fontawesome-free/css/all\\.min\\.css',
       desc => 'URL after stripped comment rewritten correctly, extfix off',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
 
     # Comment-after-rewrite with extfix on
     # With extfix, pcomment accumulates into the varbuf but pstartElement
@@ -196,14 +196,14 @@ my @tests = (
     # are dropped.  Verify URLs are still rewritten and no garbage appears.
     { type => 'url_rewrite', path => 'comment_rewrite_extfix/comment_rewrite.html',
       pattern => 'http://b\\.example\\.com/static/images/favicon\\.png', desc => 'URL rewritten with extfix on',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comment_rewrite_extfix/comment_rewrite.html',
       pattern => 'http://b\\.example\\.com/static/plugins/fontawesome-free/css/all\\.min\\.css',
       desc => 'URL after comment rewritten with extfix on',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
     { type => 'url_rewrite', path => 'comment_rewrite_extfix/comment_rewrite.html',
       pattern => 'http://b\\.example\\.com/page1\\.html', desc => 'body URL rewritten with extfix on',
-      minver => '2.4.69' },
+      minver => '2.5.1' },
 
     # Multiple URL maps tests
     { type => 'url_rewrite', path => 'multiple_maps/multiple_maps.html',
